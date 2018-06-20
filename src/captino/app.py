@@ -2,9 +2,7 @@
 
 import uuid
 
-from flask import Flask
-from flask import request
-from flask import send_file
+from flask import Flask, request, send_file, render_template
 from selenium import webdriver
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
@@ -15,14 +13,14 @@ app = Flask(__name__)
 
 @app.route('/')
 def root():
-    return 'ok'
+    return render_template('index.html')
 
 
 @app.route('/capture', methods=['GET', 'POST'])
 def capture():
     url = request.args.get('url', '')
-    width = int(request.args.get('width', 640))
-    height = int(request.args.get('height', 0))  # auto
+    width = request.args.get('width', default=640, type=int)
+    height = request.args.get('height', default=0, type=int)  # auto
     if not url:
         return '`url` is required.', 400
     driver = get_driver()
