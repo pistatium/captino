@@ -11,7 +11,8 @@ setup(
     package_dir={'': 'src'},
     include_package_data=True,
     extras_require={
-        'test': [
+        'server': [
+            'gunicorn'
         ],
     },
 )
