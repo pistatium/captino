@@ -7,7 +7,7 @@ This is the web API wrapper for PhantomJS. Capture any page and return it as an 
 ```
 docker-compose up -d
 
-http://localhost:5000/capture?url=http://example.com&width=600&height=300d
+http://localhost:5000/capture?url=http://example.com&width=600&height=300
 ```
 
 ## DockerImage
