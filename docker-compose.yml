@@ -15,6 +15,6 @@ services:
       - 5000:5000
     command: ["/bin/bash", "-cxv", "pip install -r requirements.txt && pip install -e . && flask run --host=0.0.0.0 --port 5000"]
   phantomjs:
-    image: "wernight/phantomjs"
+    image: "mmktomato/phantomjs-jp"
     command: ["phantomjs", "--webdriver=8910"]
 
