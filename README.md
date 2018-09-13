@@ -10,6 +10,7 @@ docker run -p 8000:8000 captino
 http://localhost:8000/capture?url=http://example.com&width=600&height=300
 ```
 
+
 | http://localhost:8000/capture?url=https://en.wikipedia.org/wiki/Main_Page |
 |---|
 | <img src="https://raw.githubusercontent.com/pistatium/captino/master/assets/capture.png" style="width:200px;"> |
