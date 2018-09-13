@@ -4,12 +4,18 @@ const puppeteer = require('puppeteer');
 const exec = require('child_process').exec;
 const fs = require('fs');
 
+const sleep = (sec) => {
+    return new Promise(resolve => {
+        setTimeout(resolve, sec * 1000);
+    });
+}
+
 const is_valid_url = (str) => {
   const pattern = /(http|https):\/\/(\w+:{0,1}\w*)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%!\-\/]))?/;
   return pattern.test(str);
 }
 
-const capture = async (req_url, w, h, mobile, full) => {
+const capture = async (req_url, w, h, mobile, full, delay) => {
   const path = `/screenshots/tmp.png`;
   const browser = await puppeteer.launch({
         args: [
@@ -21,6 +27,7 @@ const capture = async (req_url, w, h, mobile, full) => {
     let err = null;
     page.setViewport({width:w, height:h, isMobile:mobile});
 	await page.goto(req_url, {waitUntil: 'networkidle2'}).catch((e) => {err = e});
+    await sleep(delay);
 	await page.screenshot({path: path, fullPage: full});
 	browser.close();
 	return [path, err];
@@ -50,6 +57,7 @@ server.on('request', async (req, res) => {
     let req_url = params.url.replace('"\n', '');
     let width = parseInt(params.width || '1200');
     let height = parseInt(params.height || '800');
+    let delay = parseFloat(params.delay || '0');
     let mobile = Boolean(params.mobile);
     let full = Boolean(params.full);
 
@@ -58,7 +66,7 @@ server.on('request', async (req, res) => {
         return res.end('Invalid URL');
     }
     console.log('Capturing: ' + req_url);
-    const [path, err] = await capture(req_url, width, height, mobile, full);
+    const [path, err] = await capture(req_url, width, height, mobile, full, delay);
     if (err) {
         console.log(err);
         res.statusCode = 500;
