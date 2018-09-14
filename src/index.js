@@ -16,21 +16,21 @@ const is_valid_url = (str) => {
 }
 
 const capture = async (req_url, w, h, mobile, full, delay) => {
-  const path = `/screenshots/tmp.png`;
-  const browser = await puppeteer.launch({
+    const path = `/screenshots/tmp.png`;
+    const browser = await puppeteer.launch({
         args: [
         '--no-sandbox',
         '--disable-setuid-sandbox'
         ]
     });
-	const page = await browser.newPage();
+    const page = await browser.newPage();
     let err = null;
     page.setViewport({width:w, height:h, isMobile:mobile});
-	await page.goto(req_url, {waitUntil: 'networkidle2'}).catch((e) => {err = e});
+    await page.goto(req_url, {waitUntil: 'networkidle2'}).catch((e) => {err = e});
     await sleep(delay);
-	await page.screenshot({path: path, fullPage: full});
-	browser.close();
-	return [path, err];
+    await page.screenshot({path: path, fullPage: full});
+    browser.close();
+    return [path, err];
 }
 
 const server = http.createServer();
@@ -72,10 +72,10 @@ server.on('request', async (req, res) => {
         res.statusCode = 500;
         return res.end('Capture error:\n ' + err.message.split("\n")[0]);
     }
-	let stat = fs.statSync(path);
-	res.writeHead(200, {'Content-Type': 'image/png', 'Content-Lenght': stat.size});
-	var readStream = fs.createReadStream(path);
-	readStream.pipe(res);
+    let stat = fs.statSync(path);
+    res.writeHead(200, {'Content-Type': 'image/png', 'Content-Lenght': stat.size});
+    var readStream = fs.createReadStream(path);
+    readStream.pipe(res);
 });
 
 server.listen(8000, '0.0.0.0');
