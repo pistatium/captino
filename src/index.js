@@ -11,6 +11,8 @@ const sleep = (sec) => {
 }
 
 const is_valid_url = (str) => {
+  // AWS Metadata の参照を防ぐ
+  if (str.includes('169.254.169.254')) return false;
   const pattern = /(http|https):\/\/(\w+:{0,1}\w*)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%!\-\/]))?/;
   return pattern.test(str);
 }
